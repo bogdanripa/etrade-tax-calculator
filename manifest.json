@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+
+  "name": "Etrade Tax Calculator",
+  "description": "Tax Calculator for Etrade in Romania",
+  "version": "1.0",
+
+  "page_action": {
+    "default_icon": "icon.png",
+    "default_popup": "index.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://us.etrade.com/*"],
+      "js": ["jquery.js", "calculate.js"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "background": { "scripts": ["background.js"] },
+
+  "permissions": [
+    "tabs",
+    "https://us.etrade.com/*"
+  ]
+}

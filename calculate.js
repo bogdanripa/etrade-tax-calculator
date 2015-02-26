@@ -1,12 +1,3 @@
-// the list of table rows that we want to change
-var trList = $('#MainTBL table tr:nth-child(2n+3)');
-
-// the list of table rows where the detailed view shows up when clicking on the order #
-var tr2List = $('#MainTBL table tr:nth-child(2n+4)');
-
-// header list
-var hList = $($('#MainTBL table tr')[0]).find('td');
-
 var adobeStockValues = {
  '02/19/2015': 77.73,
  '02/18/2015': 77.73,
@@ -1903,11 +1894,9 @@ var adobeStockValues = {
  '08/14/2007': 40.41
  };
 
-// the line we're working on
-var idx = 0;
-
 // this loop executes once a second to open all detail views
 var loop = function() {
+	if (!$) return;
 	var tr = trList[idx++];	
 
 	if (!tr) {
@@ -1926,6 +1915,11 @@ var loop = function() {
 	tr = $(tr);
 	var a = tr.find('td:nth-child(8) a');
 	// click on the order number
+	if (!a[0]) {
+		clearTimeout(tmo);
+		alert("Pls filter on 'executed'");
+		return;
+	}
 	a[0].click();
 };
 
@@ -2068,6 +2062,28 @@ var updateDates = function() {
 	$('<p style="text-align: right; color: black; font-size: 1.3em;">Total Profits: $'+totalProfits+'</p>').insertAfter('#MainTBL');
 }
 
-var tmo = setInterval(loop, 1000);
+var initRomaniaTaxes = function() {
+	// the list of table rows that we want to change
+	window.trList = $('#MainTBL table tr:nth-child(2n+3)');
 
+	// the list of table rows where the detailed view shows up when clicking on the order #
+	window.tr2List = $('#MainTBL table tr:nth-child(2n+4)');
 
+	// header list
+	window.hList = $($('#MainTBL table tr')[0]).find('td');
+
+	if (window.tmo) clearTimeout(window.tmo);
+
+	// the line we're working on
+	window.idx = 0;
+
+	window.tmo = setInterval(loop, 1000);
+}
+
+//setTimeout(initRomaniaTaxes, 10000);
+
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+	if (request.action == "initRomaniaTaxes") {
+		initRomaniaTaxes();
+	}
+});
