@@ -9,7 +9,7 @@ How to use:
 5. Install it
 6. Go to https://us.etrade.com/e/t/stockplan/transactionhistory?ploc=c-newnav-acct-etcs
 7. Filter on “Executed”
-8. Click on the Etrade/Romania icon
+8. Click on the Etrade/Romania icon (http://screencast.com/t/HtNHtYoX)
 9. Wait, check. If errors, click the icon again (you might have to refresh that page)
 
 And you're done! Remember to triple-check everything.
