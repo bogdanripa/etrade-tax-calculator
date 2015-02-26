@@ -8,7 +8,7 @@ How to use:
 4. Drag the downloaded file (etrade-tax-calculator.crx) in your browser window
 5. Install it
 6. Go to https://us.etrade.com/e/t/stockplan/transactionhistory?ploc=c-newnav-acct-etcs
-7. Filter on “Executed”
+7. Filter on “Executed” and then on 2014
 8. Click on the Etrade/Romania icon (http://screencast.com/t/HtNHtYoX)
 9. Wait, check. If errors, click the icon again (you might have to refresh that page)
 
