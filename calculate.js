@@ -1988,10 +1988,10 @@ var updateDates = function() {
 			var date = $(tr2List[i]).find('div#wrap>div>table>tbody>tr:nth-child(2)>td:nth-child(1) table tr:nth-child('+j+') td:nth-child(1)').text().replace(/\s/, '');
 			lineDates += date;
 
-			var y = new Date(date).getFullYear();
+			var dateObj = new Date(date);
 
-			if (RSU || (!RSU && (y <= 2011 || y >= 2014))) {
-				// if RSU or ESPP, but before 2011 or after 2013
+			if (RSU || (!RSU && (dateObj <= new Date('12/31/2011') || dateObj >= new Date('12/31/2013')))) {
+				// if RSU or ESPP, but before 2012 or after 2013
 				// use the market value
 				for (var tries=0;tries<10;tries++) {
 					stockPrice = adobeStockValues[date];
