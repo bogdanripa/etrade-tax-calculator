@@ -7,12 +7,12 @@
 
   "page_action": {
     "default_icon": "icon.png",
-    "default_popup": "index.html"
+    "default_popup": "popup.html"
   },
 
   "content_scripts": [
     {
-      "matches": ["https://us.etrade.com/*"],
+      "matches": ["https://us.etrade.com/*", "http://localhost:8000/*"],
       "js": ["inject.js"],
       "run_at": "document_end"
     }
