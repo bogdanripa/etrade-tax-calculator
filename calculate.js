@@ -43,12 +43,14 @@ var updateDates2 = function() {
 
 			orderGrossRevenue += sellingPricePerShare * sharesCount;
 
+            var RSU = (grant.type == "RSU")
 			var date = grant.vestDate;
-            var stockPrice = 0;
-
+            if (!RSU){
+                date = grant.purchaseDate;
+            }
 			var dateObj = new Date(date);
 
-            var RSU = (grant.type == "RSU")
+            var stockPrice = 0;
 
 			if (RSU || (!RSU && (dateObj <= new Date('12/31/2011') || dateObj >= new Date('12/31/2013')))) {
 				// if RSU or ESPP, but before 2012 or after 2013
