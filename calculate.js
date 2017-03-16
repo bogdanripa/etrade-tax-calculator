@@ -1,3 +1,14 @@
+(function () {
+  var info = console.info;
+  console.captured = ""
+  console.info = function () {
+    var args =  Array.prototype.slice.call(arguments);
+    info.apply(this, args);
+    console.captured += args.join(" ")+"\n";
+  };
+}());
+
+
 var updateDates2 = function() {
     
     var scope = angular.element($('.ordersGrantTbl')).scope()
@@ -10,18 +21,12 @@ var updateDates2 = function() {
         var order = settled[i]
 		var lineComission = 0;
 		var stockPrice = 0;
-		var RSU = true;
 
 		// get the selling proce per share for the table
 		var sellingPricePerShare = order.executedPrice
 
-		var lineGrossRevenue = 0;
-		var lineProfit = 0;
-
-		// if selling ESPP
-		if (order.plantype == 'ESPP') {
-			RSU = false;
-		}
+		var orderGrossRevenue = 0;
+		var orderCost = 0;
 
 		// calculate the line-level lineComission
 		lineComission = order.disbursementDetails[0].commission+
@@ -29,19 +34,21 @@ var updateDates2 = function() {
                         order.disbursementDetails[0].brokerageAssistFee+
                         order.disbursementDetails[0].secFee;
 
-        console.log("---------------------",order.soldQty,"*",order.executedPrice)
+        console.info("Order: ",order.soldQty,"*",order.executedPrice)
 
 		// for all grants in this transaction
 		for (var grant of order.purchaseGrantDetails) {
 
 			var sharesCount = grant.sharesSellSold
 
-			lineGrossRevenue += sellingPricePerShare * sharesCount;
+			orderGrossRevenue += sellingPricePerShare * sharesCount;
 
 			var date = grant.vestDate;
             var stockPrice = 0;
 
 			var dateObj = new Date(date);
+
+            var RSU = (grant.type == "RSU")
 
 			if (RSU || (!RSU && (dateObj <= new Date('12/31/2011') || dateObj >= new Date('12/31/2013')))) {
 				// if RSU or ESPP, but before 2012 or after 2013
@@ -49,7 +56,7 @@ var updateDates2 = function() {
                 
                 while(stockPrice == 0){
 				    stockPrice = adobeStockValues[date] || 0;
-                    console.debug("\t\t go back 1 day and get close price", date, stockPrice)
+                    // console.debug("\t\t go back 1 day and get close price", date, stockPrice)
                     // go back 1 day nasdaq was closed  
                     var dateMinus1 = new Date(dateObj.getTime()-24*60*60*1000)
                     var d=dateMinus1.toISOString().split("T")[0].split('-')
@@ -61,10 +68,13 @@ var updateDates2 = function() {
 				stockPrice = grant.purchasePrice;
 			}
 
-			lineProfit += stockPrice * sharesCount;
+			var grantCost = stockPrice * sharesCount;
+            orderCost += grantCost
+            console.info("\t",RSU?"[RSU ]":"[ESPP]","grant cost: ",grantCost,"=",stockPrice,"*",sharesCount)
 		}
-        console.info("profit ",lineGrossRevenue-lineProfit-lineComission," => ",lineGrossRevenue,"-",lineProfit,"-",lineComission )
-		
+        var orderProfit = orderGrossRevenue-orderCost-lineComission
+        console.info("order profit: ",orderProfit," = ",orderGrossRevenue,"-",orderCost,"-",lineComission )
+		totalProfits += orderProfit
 	}
 
 	totalProfits = parseInt(totalProfits*100)/100;
@@ -73,7 +83,10 @@ var updateDates2 = function() {
 }
 
 var initRomaniaTaxes = function() {
-    updateDates2()
+    console.captured = "";
+    updateDates2();
+    var w = window.open();
+    $(w.document.body).html("<pre>"+console.captured+"</pre>");
 }
 
 
