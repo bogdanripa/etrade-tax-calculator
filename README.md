@@ -15,3 +15,5 @@ How to use:
 And you're done! Remember to triple-check everything.
 
 Update note: the main script has a big JSON with Adobe's closing stock price. It will need to be updated with time.
+
+https://us.etrade.com/etx/sp/stockplan/#/myAccount/orders?ploc=c-newnav-acct-etcs

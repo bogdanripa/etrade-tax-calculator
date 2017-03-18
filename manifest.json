@@ -7,18 +7,19 @@
 
   "page_action": {
     "default_icon": "icon.png",
-    "default_popup": "index.html"
+    "default_popup": "popup.html"
   },
 
   "content_scripts": [
     {
-      "matches": ["https://us.etrade.com/*"],
-      "js": ["jquery.js", "calculate.js"],
+      "matches": ["https://us.etrade.com/*", "http://localhost:8000/*"],
+      "js": ["inject.js"],
       "run_at": "document_end"
     }
   ],
 
   "background": { "scripts": ["background.js"] },
+  "web_accessible_resources": ["calculate.js", "adbe.js"],
 
   "permissions": [
     "tabs",
